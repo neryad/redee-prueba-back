@@ -28,5 +28,12 @@ namespace redee_prueba_back.Data
             return companies.SingleOrDefault();
         }
 
+        public virtual async Task<int> InsertCompanyAsync(Company company)
+        {
+            return await Database.ExecuteSqlRawAsync("EXEC InsertCompany_SP {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}",
+                company.Rnc, company.Name, company.CommercialName, company.Status, company.Category, company.Payment, company.Activity, company.Branch);
+           
+        }
+
     }
 }

@@ -66,8 +66,8 @@ namespace redee_prueba_back.Controllres
             {
                 return BadRequest("Company cannot be null");
             }
-            applicationDbContext.Companies.Add(company);
-            await applicationDbContext.SaveChangesAsync();
+            await applicationDbContext.InsertCompanyAsync(company);
+
             return CreatedAtAction(nameof(Get), new { id = company.Id }, company);
 
         }
