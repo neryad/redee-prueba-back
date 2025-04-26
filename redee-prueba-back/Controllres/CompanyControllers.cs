@@ -20,7 +20,7 @@ namespace redee_prueba_back.Controllres
         [HttpGet]
         public async Task<IEnumerable<Company>> Get ()
         {
-            return await applicationDbContext.Companies.ToListAsync();
+            return await applicationDbContext.GetAllCompaniesAsync();
         }
 
         [HttpGet("{id:int}")]

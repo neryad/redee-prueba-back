@@ -12,5 +12,11 @@ namespace redee_prueba_back.Data
 
 
            public DbSet<Company> Companies { get; set; }
+
+        // Metos de store procedures
+
+        public virtual Task<List<Company>> GetAllCompaniesAsync() => Set<Company>()
+            .FromSqlRaw("EXECUTE dbo.GetAllCompanies_SP")
+            .ToListAsync();
     }
 }
