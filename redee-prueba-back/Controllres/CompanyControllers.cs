@@ -60,8 +60,7 @@ namespace redee_prueba_back.Controllres
             {
                 return NotFound();
             }
-            applicationDbContext.Remove(company);
-            await applicationDbContext.SaveChangesAsync();
+           await  applicationDbContext.DeleteCompanyAsync(id);
             return Ok();
         }
 

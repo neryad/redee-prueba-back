@@ -41,5 +41,10 @@ namespace redee_prueba_back.Data
                 company.Id, company.Rnc, company.Name, company.CommercialName, company.Status, company.Category, company.Payment, company.Activity, company.Branch);
         }
 
+        public virtual async Task<int> DeleteCompanyAsync(int id)
+        {
+            return await Database.ExecuteSqlRawAsync("EXEC DeleteCompany_SP {0}", id);
+        }
+
     }
 }
