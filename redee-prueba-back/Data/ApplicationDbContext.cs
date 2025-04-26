@@ -18,5 +18,15 @@ namespace redee_prueba_back.Data
         public virtual Task<List<Company>> GetAllCompaniesAsync() => Set<Company>()
             .FromSqlRaw("EXECUTE dbo.GetAllCompanies_SP")
             .ToListAsync();
+
+        public virtual async Task<Company?> GetCompanyByIdAsync(int id)
+        {
+            var companies = await Set<Company>()
+                .FromSqlRaw("EXEC GetCompanyById_SP {0}", id)
+                .ToListAsync(); 
+
+            return companies.SingleOrDefault();
+        }
+
     }
 }

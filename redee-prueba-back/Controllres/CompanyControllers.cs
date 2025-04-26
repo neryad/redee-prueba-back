@@ -26,7 +26,7 @@ namespace redee_prueba_back.Controllres
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Company>> Get(int id)
         {
-            var company = await applicationDbContext.Companies.FirstOrDefaultAsync(x => x.Id == id);
+            var company = await applicationDbContext.GetCompanyByIdAsync(id);
             if (company == null)
             {
                 return NotFound();
