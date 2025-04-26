@@ -39,11 +39,17 @@ namespace redee_prueba_back.Controllres
         {
             if (id != company.Id)
             {
-                return BadRequest("Id no coicinde");
+                return BadRequest("Id no coincide");
             }
-            applicationDbContext.Update(company);
-            await applicationDbContext.SaveChangesAsync();
-            return Ok();
+            var rowAffected = await applicationDbContext.UpdateCompanyAsync(company);
+            if (rowAffected == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(rowAffected);
+            }
         }
 
         [HttpDelete("{id:int}")]

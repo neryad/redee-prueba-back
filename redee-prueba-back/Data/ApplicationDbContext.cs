@@ -35,5 +35,11 @@ namespace redee_prueba_back.Data
            
         }
 
+        public virtual async Task<int> UpdateCompanyAsync(Company company)
+        {
+            return await Database.ExecuteSqlRawAsync("EXEC UpdateCompany_SP {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}",
+                company.Id, company.Rnc, company.Name, company.CommercialName, company.Status, company.Category, company.Payment, company.Activity, company.Branch);
+        }
+
     }
 }
