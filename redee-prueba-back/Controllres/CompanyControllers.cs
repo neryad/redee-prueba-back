@@ -46,6 +46,19 @@ namespace redee_prueba_back.Controllres
             return Ok();
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var company = await applicationDbContext.Companies.FirstOrDefaultAsync(x => x.Id == id);
+            if (company == null)
+            {
+                return NotFound();
+            }
+            applicationDbContext.Remove(company);
+            await applicationDbContext.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(Company company)
         {
