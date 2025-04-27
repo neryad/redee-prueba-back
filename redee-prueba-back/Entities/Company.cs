@@ -18,7 +18,7 @@ namespace redee_prueba_back.Entities
         [Required]
         public string Status { get; set; }
 
-        public string Category { get; set; } 
+        public string? Category { get; set; } 
 
         [Required]
         public string Payment { get; set; }
