@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Octetus.ConsultasDgii.Core.Messages;
+using Octetus.ConsultasDgii.Services;
 using redee_prueba_back.Data;
 using redee_prueba_back.Entities;
 
@@ -7,18 +9,13 @@ namespace redee_prueba_back.Controllres
 {
     [ApiController]
     [Route("api/companies")]
-     public class CompanyControllers : ControllerBase
+    public class CompanyControllers(ApplicationDbContext applicationDbContext, ServicioConsultasWebDgii servicioConsultasWebDgii) : ControllerBase
     {
-        private readonly ApplicationDbContext applicationDbContext;
+        private readonly ApplicationDbContext applicationDbContext = applicationDbContext;
+        private readonly ServicioConsultasWebDgii servicioConsultasWebDgii = servicioConsultasWebDgii;
 
-        public CompanyControllers(ApplicationDbContext applicationDbContext)
-        {
-            this.applicationDbContext = applicationDbContext;
-        }
-
-      
         [HttpGet]
-        public async Task<IEnumerable<Company>> Get ()
+        public async Task<IEnumerable<Company>> Get()
         {
             return await applicationDbContext.GetAllCompaniesAsync();
         }
@@ -60,7 +57,7 @@ namespace redee_prueba_back.Controllres
             {
                 return NotFound();
             }
-           await  applicationDbContext.DeleteCompanyAsync(id);
+            await applicationDbContext.DeleteCompanyAsync(id);
             return Ok();
         }
 
@@ -74,8 +71,38 @@ namespace redee_prueba_back.Controllres
             await applicationDbContext.InsertCompanyAsync(company);
 
             return CreatedAtAction(nameof(Get), new { id = company.Id }, company);
-
         }
 
+        [HttpGet]
+        [Route("rnc/{rnc}")]
+        public IActionResult getRnc(string rnc)
+        {
+            RespuestaConsultaRncContribuyentes response = servicioConsultasWebDgii.ConsultarRncContribuyentes(rnc);
+
+            if (response == null)
+            {
+                return NotFound(new { success = false, message = "No se recibió respuesta del servicio DGII." });
+            }
+
+            if (!response.Success)
+            {
+                return NotFound(new { success = false, message = response.Message });
+            }
+
+           
+            var company = new Company
+            {
+                Rnc = response.CedulaORnc,
+                Name = response.NombreORazónSocial,
+                CommercialName = string.IsNullOrWhiteSpace(response.NombreComercial) ? "N/A" : response.NombreComercial,
+                Status = response.Estado,
+                Category = response.Categoría,
+                Payment = response.RegimenDePagos,
+                Activity = response.ActividadEconomica,
+                Branch = response.AdministracionLocal
+            };
+
+            return Ok(new { success = true, data = company });
+        }
     }
 }
