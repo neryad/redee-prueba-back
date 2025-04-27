@@ -7,13 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 //Esta de esta forma para que se pueda probar
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(options =>
-        
-        {
-            options.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
 
 builder.Services.AddControllers();
@@ -25,6 +24,8 @@ var app = builder.Build();
 
 //Area de middleares
 app.UseCors();
+app.UseRouting();
+app.UseAuthorization();
 app.MapControllers();
 
 
